@@ -12,46 +12,50 @@ FaceDetection::FaceDetection()
     }
 }
 
-void FaceDetection::DetectPhoto()
+void FaceDetection::DetectPhoto(QString photo, QCheckBox *detectEyes)
 {
-    string path = "D:/Desktop/School/3.Rocnik/Bakalarka/program/Qt_Face_Detection/TestFiles/test.jpg";
+    bool detectEyesBool = detectEyes->isChecked();
+//    string path = "D:/Desktop/School/3.Rocnik/Bakalarka/program/Qt_Face_Detection/TestFiles/test.jpg";
+    string path = photo.toStdString();
     Mat img, detectedImage;
     img = imread(path);
-    detectedImage = this->detectFace(img);
-    imshow("Testovaci image", img);
+    detectedImage = this->detectFace(img, detectEyesBool);
+    imshow("Spracovany obrazok", img);
 //    imshow("Rozpoznany image", detectedImage);
     waitKey(0);
 }
 
-void FaceDetection::DetectLiveCamera()
+void FaceDetection::DetectLiveCamera(QCheckBox *detectEyes)
 {
     VideoCapture webcam(0);
     Mat img, detected_image;
+    bool detectEyesBool = detectEyes->isChecked();
     int exit_key = -1;
-    namedWindow("Webcam", WINDOW_AUTOSIZE);
+    namedWindow("Webkamera", WINDOW_AUTOSIZE);
 
     while (true)
     {
         webcam.read(img);
-        detected_image = this->detectFace(img);
-        imshow("Webcam", img);
+        detected_image = this->detectFace(img, detectEyesBool);
+        imshow("Webkamera", img);
         exit_key = waitKey(1);
         if (exit_key == 27) {
             break;
         }
-        exit_key = getWindowProperty("Webcam", WND_PROP_VISIBLE);
+        exit_key = getWindowProperty("Webkamera", WND_PROP_VISIBLE);
         if (exit_key == 0) {
             break;
         }
     }
-    destroyWindow("Webcam");
+    destroyWindow("Webkamera");
 }
 
-void FaceDetection::DetectMultiplePhotos(QString dir, QStringList photos, QProgressBar *progress)
+void FaceDetection::DetectMultiplePhotos(QString dir, QStringList photos, QProgressBar *progress, QCheckBox *detectEyes)
 {
     Mat img, detectedImage;
     QString photo;
     String path, resultPath;
+    bool detectEyesBool = detectEyes->isChecked();
     bool test;
     double progressValue = 0.00, forIter = 0.00, photosLength = photos.length();
     foreach (photo, photos) {
@@ -60,7 +64,7 @@ void FaceDetection::DetectMultiplePhotos(QString dir, QStringList photos, QProgr
         path = photo.toStdString();
         img = imread(path);
         resultPath = dir.toStdString() + path.substr(path.find_last_of("/"));
-        detectedImage = this->detectFace(img);
+        detectedImage = this->detectFace(img, detectEyesBool);
         test = imwrite(resultPath, detectedImage);
         progress->setValue(progressValue);
 //        imshow("UndetectedPhoto",img);
@@ -75,7 +79,7 @@ FaceDetection::~FaceDetection()
 
 }
 
-Mat FaceDetection::detectFace(Mat &img)
+Mat FaceDetection::detectFace(Mat &img, bool detectEyes)
 {
     vector<Rect> faces, eyes;
     Mat grayImage;
@@ -93,18 +97,20 @@ Mat FaceDetection::detectFace(Mat &img)
         rectangle(img, faces[i].tl(), faces[i].br(), Scalar(0, 0, 255), 2);
 
         detectedFace = grayImage(faces[i]);
-        eye_casc_clasif.detectMultiScale(detectedFace, eyes, 1.1, 10);
-        for (int j = 0; j < eyes.size(); ++j) {
-//            Point center_of_detected_eye(eyes[j].x + eyes[j].width / 2, eyes[j].y + eyes[j].height / 2);
-            Point center_of_detected_eye(faces[i].x + eyes[j].x + eyes[j].width / 2, faces[i].y + eyes[j].y + eyes[j].height / 2);
-            circle(img, center_of_detected_eye, eyes[j].height / 2, Scalar(255, 0, 0), 2);
-        }
-        if (eyes.size() == 0) {
-            eye_glasses_casc_clasif.detectMultiScale(detectedFace, eyes, 1.1, 10);
+        if (detectEyes) {
+            eye_casc_clasif.detectMultiScale(detectedFace, eyes, 1.1, 10);
             for (int j = 0; j < eyes.size(); ++j) {
     //            Point center_of_detected_eye(eyes[j].x + eyes[j].width / 2, eyes[j].y + eyes[j].height / 2);
                 Point center_of_detected_eye(faces[i].x + eyes[j].x + eyes[j].width / 2, faces[i].y + eyes[j].y + eyes[j].height / 2);
-                circle(img, center_of_detected_eye, eyes[j].height / 2, Scalar(0, 255, 0), 2);
+                circle(img, center_of_detected_eye, eyes[j].height / 2, Scalar(255, 0, 0), 2);
+            }
+            if (eyes.size() == 0) {
+                eye_glasses_casc_clasif.detectMultiScale(detectedFace, eyes, 1.1, 10);
+                for (int j = 0; j < eyes.size(); ++j) {
+        //            Point center_of_detected_eye(eyes[j].x + eyes[j].width / 2, eyes[j].y + eyes[j].height / 2);
+                    Point center_of_detected_eye(faces[i].x + eyes[j].x + eyes[j].width / 2, faces[i].y + eyes[j].y + eyes[j].height / 2);
+                    circle(img, center_of_detected_eye, eyes[j].height / 2, Scalar(0, 255, 0), 2);
+                }
             }
         }
     }

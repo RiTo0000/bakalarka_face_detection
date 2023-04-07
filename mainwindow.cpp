@@ -30,16 +30,22 @@ void MainWindow::on_Btn_detectFromFile_clicked()
                                                     QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks);
 
-    face.DetectMultiplePhotos(dir, photos, ui->ProgBar_fromFile);
+    face.DetectMultiplePhotos(dir, photos, ui->ProgBar_fromFile, ui->CheckBox_EyeDetection);
 }
 
 void MainWindow::on_Btn_detectFromLiveCam_clicked()
 {
-    face.DetectLiveCamera();
+    face.DetectLiveCamera(ui->CheckBox_EyeDetection);
 }
 
 void MainWindow::on_Btn_detectDefaultPhoto_clicked()
 {
-    face.DetectPhoto();
+    // vyber obrazky na detekovanie
+    QString photo = QFileDialog::getOpenFileName(
+                            this,
+                            "Vyber fotografie na detekciu obrazu",
+                            "/home",
+                            "Images (*.png *.xpm *.jpg)");
+    face.DetectPhoto(photo, ui->CheckBox_EyeDetection);
 }
 

@@ -6,64 +6,77 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>434</width>
+    <height>177</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Systém pre automatickú detekciu tváre</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="Btn_detectDefaultPhoto">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>40</y>
-      <width>121</width>
+      <x>20</x>
+      <y>30</y>
+      <width>220</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
-     <string>Open default photo</string>
+     <string>Detekcia tváre na obrázku</string>
     </property>
    </widget>
    <widget class="QPushButton" name="Btn_detectFromLiveCam">
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>70</y>
-      <width>151</width>
+      <x>20</x>
+      <y>60</y>
+      <width>220</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
-     <string>Detect face from live cam</string>
+     <string>Detekcia tváre z webkamery</string>
     </property>
    </widget>
    <widget class="QPushButton" name="Btn_detectFromFile">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>100</y>
-      <width>201</width>
+      <x>20</x>
+      <y>90</y>
+      <width>220</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
-     <string>Detect faces on images in browser</string>
+     <string>Detekcia tváre na vybranýh obrázkoch</string>
     </property>
    </widget>
    <widget class="QProgressBar" name="ProgBar_fromFile">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>100</y>
-      <width>118</width>
-      <height>23</height>
+      <x>250</x>
+      <y>90</y>
+      <width>120</width>
+      <height>24</height>
      </rect>
     </property>
     <property name="value">
      <number>0</number>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="CheckBox_EyeDetection">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>30</y>
+      <width>120</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Aj detekcia očí</string>
     </property>
    </widget>
   </widget>
@@ -72,7 +85,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>434</width>
      <height>21</height>
     </rect>
    </property>
