@@ -21,7 +21,6 @@ void FaceDetection::DetectPhoto(QString photo, QCheckBox *detectEyes)
     img = imread(path);
     detectedImage = this->detectFace(img, detectEyesBool);
     imshow("Spracovany obrazok", img);
-//    imshow("Rozpoznany image", detectedImage);
     waitKey(0);
 }
 
@@ -67,10 +66,6 @@ void FaceDetection::DetectMultiplePhotos(QString dir, QStringList photos, QProgr
         detectedImage = this->detectFace(img, detectEyesBool);
         test = imwrite(resultPath, detectedImage);
         progress->setValue(progressValue);
-//        imshow("UndetectedPhoto",img);
-//        imshow("DetectedPhoto", detectedImage);
-//        waitKey(0);
-
     }
 }
 
@@ -91,8 +86,6 @@ Mat FaceDetection::detectFace(Mat &img, bool detectEyes)
     frontalFace_casc_clasif.detectMultiScale(grayImage, faces, 1.1, 10);
 
     for (int i = 0; i < faces.size(); i++) {
-//        detectedFace = detectedImage(faces[i]);
-//        eye_casc_clasif.detectMultiScale(detectedFace, eyes, 1.1, 10);
         //select fase pre detekciu oci
         rectangle(img, faces[i].tl(), faces[i].br(), Scalar(0, 0, 255), 2);
 
@@ -100,14 +93,12 @@ Mat FaceDetection::detectFace(Mat &img, bool detectEyes)
         if (detectEyes) {
             eye_casc_clasif.detectMultiScale(detectedFace, eyes, 1.1, 10);
             for (int j = 0; j < eyes.size(); ++j) {
-    //            Point center_of_detected_eye(eyes[j].x + eyes[j].width / 2, eyes[j].y + eyes[j].height / 2);
                 Point center_of_detected_eye(faces[i].x + eyes[j].x + eyes[j].width / 2, faces[i].y + eyes[j].y + eyes[j].height / 2);
                 circle(img, center_of_detected_eye, eyes[j].height / 2, Scalar(255, 0, 0), 2);
             }
             if (eyes.size() == 0) {
                 eye_glasses_casc_clasif.detectMultiScale(detectedFace, eyes, 1.1, 10);
                 for (int j = 0; j < eyes.size(); ++j) {
-        //            Point center_of_detected_eye(eyes[j].x + eyes[j].width / 2, eyes[j].y + eyes[j].height / 2);
                     Point center_of_detected_eye(faces[i].x + eyes[j].x + eyes[j].width / 2, faces[i].y + eyes[j].y + eyes[j].height / 2);
                     circle(img, center_of_detected_eye, eyes[j].height / 2, Scalar(0, 255, 0), 2);
                 }
