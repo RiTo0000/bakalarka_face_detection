@@ -64,6 +64,12 @@ void FaceDetection::DetectMultiplePhotos(QString dir, QStringList photos, QProgr
         img = imread(path);
         resultPath = dir.toStdString() + path.substr(path.find_last_of("/"));
         detectedImage = this->detectFace(img, detectEyesBool);
+
+//        --For testing purposes only--
+//        if (!detectedImage.empty()) {
+//            test = imwrite(resultPath, detectedImage);
+//        }
+
         test = imwrite(resultPath, detectedImage);
         progress->setValue(progressValue);
     }
@@ -106,6 +112,15 @@ Mat FaceDetection::detectFace(Mat &img, bool detectEyes)
         }
     }
 
+//    --For testing purposes only--
+//    if (faces.size() > 0) {
+//        return img;
+//    }
+//    else {
+//        return detectedFace;
+//    }
+
     return img;
+
 }
 

@@ -59,7 +59,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 #    haarcascades/haarcascade_upperbody.xml
 
 DISTFILES += \
-    TestFiles/test.jpg \
+#    TestFiles/test.jpg \
     haarcascades/haarcascade_eye.xml \
     haarcascades/haarcascade_eye_tree_eyeglasses.xml \
     haarcascades/haarcascade_frontalcatface.xml \
